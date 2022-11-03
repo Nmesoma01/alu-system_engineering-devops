@@ -1,24 +1,12 @@
 #!/usr/bin/env bash
-# Configures NGINX server to display custom 404 page
-# Page contains the text "Ceci n'est pas une page"
-sudo apt update
-sudo apt install nginx -y
-sudo touch /var/www/html/index.html
-sudo touch /var/www/html/error404.html
-echo "Holberton School" | sudo tee /var/www/html/index.html
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/error404.html
-
-printf %s "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        root /var/www/html;
-        index index.html;
-        error_page 404 /error404.html;
-        server_name _;
-        location /redirect_me {
-           return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4/;
-        }
-}
-" | sudo tee /etc/nginx/sites-available/default
-
+# Installing Nginx on Server and 404 page
+sudo apt-get update -y && sudo apt-get upgrade -y
+sudo apt-get install -y nginx
+sudo chown -R "$USER":"$USER" /var/www/
+sudo chown -R "$USER":"$USER" /etc/nginx
+echo "Holberton School" > /var/www/html/index.nginx-debian.html
+echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
+line="\\\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}"
+sudo sed -i "27i $line" /etc/nginx/sites-available/default
 sudo service nginx restart
+sudo service nginx reload
