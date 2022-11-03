@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# install nginx to create html pages - 404
-REDIR="\\\tlocation /redirect_me {\n\t\t return 301 https://onepiece.fandom.com/wiki/One_Piece_Wiki;\n\t}\n"
-ERRDIR="\\\n\terror_page 404 /custom_404.html;\n\tlocation = /custom_404.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t}\n"
-SRC="/etc/nginx/sites-available/default"
-apt-get -y update
-apt-get -y install nginx
-sudo service nginx start
-echo "Holberton School" | sudo tee /var/www/html/index.nginx-debian.html
-sudo sed -i "30i $REDIR" $SRC
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
-sudo sed -i "40i $ERRDIR" $SRC
+#Installing nginx
+sudo apt-get update
+sudo apt-get -y install nginx
+sudo touch /var/www/html/index.html
+sudo touch /var/www/html/error404.html
+echo "Holberton School" | sudo tee /var/www/html/index.html
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/error404.html
+
+sudo sed -i "/listen 80 default_server; error_page404 /error404.html; /a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-enabled/default
 sudo service nginx restart
