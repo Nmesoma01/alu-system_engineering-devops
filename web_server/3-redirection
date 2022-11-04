@@ -1,21 +1,11 @@
-#!/usr/bin/env bash
-# script that install nginx and configure it to redirect to another page when
-# accessing the /redirect_me page.
-sudo apt update -y
-# comment
-sudo apt update
-sudo apt install nginx -y
-sudo touch /var/www/html/index.html
+#Installing nginx
+sudo apt-get update
+sudo apt-get -y install nginx
 echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# store configuration content
-new_config=\
-"server {
-printf %s 'server {
+printf %s "server {
         listen 80 default_server;
         listen [::]:80 default_server;
-               root /var/www/html;
-        index index.html index.htm index.nginx-debian.html;
         # SSL configuration
         #
         # listen 443 ssl default_server;
@@ -35,11 +25,6 @@ printf %s 'server {
         # Add index.php to the list if you are using PHP
         index index.html;
         server_name _;
-        location / {
-                try_files \$uri \$uri/ =404;
-        }
-        location /redirect_me { 
-            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
         location /redirect_me {
            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4/;
         }
@@ -60,5 +45,5 @@ printf %s 'server {
         #       deny all;
         #}
 }
-' | sudo tee /etc/nginx/sites-available/default
- sudo service nginx restart
+" | sudo tee /etc/nginx/sites-available/default
+sudo service nginx restart
