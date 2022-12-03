@@ -2,5 +2,6 @@
 #nginx must be listening on all active IPs on port 8080
 
 lsof -i:8080
+sudo -u "$1" "whoami"
 sed -i 's/80 default_server/8080 default_server/g' /etc/nginx/sites-available/default
 sudo -u nginx service nginx start
